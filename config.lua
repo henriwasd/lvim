@@ -7,7 +7,7 @@ lvim.format_on_save = true
 lvim.reload_config_on_save = true
 lvim.transparent_window = true
 lvim.builtin.nvimtree.setup.view.width = 50
-vim.opt.textwidth = 160
+-- vim.opt.textwidth = 160
 vim.cmd('set number relativenumber')
 lvim.plugins = {
   {
@@ -67,33 +67,8 @@ lvim.plugins = {
       })
     end
   },
+  { 'mg979/vim-visual-multi' }
 }
-
--- local auto_group = vim.api.nvim_create_augroup("LspAuGroup", { clear = true })
-
--- vim.api.nvim_create_autocmd("LspAttach", {
---   callback = function(args)
---     local client = vim.lsp.get_client_by_id(args.data.client_id)
---     -- highlight references
---     if client.server_capabilities.documentHighlightProvider then
---       vim.api.nvim_create_autocmd("CursorHold", {
---         callback = function() vim.lsp.buf.document_highlight() end,
---         group = auto_group,
---       })
---       vim.api.nvim_create_autocmd("CursorMoved", {
---         callback = function() vim.lsp.buf.clear_references() end,
---         group = auto_group,
---       })
---     end
---     -- formatting
---     if client.server_capabilities.documentFormattingProvider then
---       vim.api.nvim_create_autocmd("BufWritePre", {
---         callback = function() vim.lsp.buf.format() end,
---         group = auto_group,
---       })
---     end
---   end,
--- })
 
 local has_words_before = function()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
@@ -114,3 +89,33 @@ lvim.builtin.cmp.mapping["<Tab>"] = on_tab
 vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true })
+
+lvim.leader = "space"
+
+lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
+lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
+
+lvim.keys.normal_mode["<S-x>"] = ":BufferKill<CR>"
+lvim.keys.normal_mode["<C-d>"] = "<C-d>zz"
+lvim.keys.normal_mode["<C-u>"] = "<C-u>zz"
+lvim.keys.normal_mode["<C-a>"] = "ggVG"
+vim.opt.relativenumber = true
+
+vim.keymap.set('n', 'gn', ":tabe %<CR>")
+lvim.lsp.buffer_mappings.normal_mode["gr"] = {
+  ":lua require'telescope.builtin'.lsp_references()<cr>",
+}
+
+lvim.lsp.buffer_mappings.normal_mode["gd"] = {
+  ":lua vim.lsp.buf.definition()<cr>",
+  -- ":lua require'telescope.builtin'.lsp_definitions()<cr>",
+}
+lvim.keys.normal_mode["<C-b>"] = ":TmuxNavigateLeft<CR>"
+lvim.lsp.buffer_mappings.normal_mode["gD"] = {
+  ":lua vim.lsp.buf.type_definition()<cr>",
+}
+
+lvim.lsp.buffer_mappings.normal_mode["gf"] = {
+  ":Telescope frecency<cr>",
+}

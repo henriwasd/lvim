@@ -14,7 +14,7 @@ lvim.plugins = {
     'akinsho/flutter-tools.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'stevearc/dressing.nvim', -- optional for vim.ui.select
+      'stevearc/dressing.nvim',
     },
     config = function()
       require("flutter-tools").setup({
@@ -34,13 +34,23 @@ lvim.plugins = {
           register_configurations = function(_)
             local dap = require("dap")
             dap.set_log_level("TRACE")
-            dap.configurations.dart = {}
+            -- dap.configurations.dart = {
+            --   type = "dart",
+            --   request = "launch",
+            --   name = "Launch flutter",
+            --   dartSdkPath = 'home/Applications/flutter/bin/cache/dart-sdk/',
+            --   flutterSdkPath = "home/Applications/flutter",
+            --   program = "${workspaceFolder}/lib/main.dart",
+            --   cwd = "${workspaceFolder}",
+            -- }
             require("dap.ext.vscode").load_launchjs()
           end,
         },
         dev_log = {
+          -- toggle it when you run without DAP
           enabled = false,
         },
+
       })
     end,
   },
@@ -67,8 +77,11 @@ lvim.plugins = {
       })
     end
   },
-  { 'mg979/vim-visual-multi' }
+  { 'mg979/vim-visual-multi' },
+  { 'dracula/vim' }
 }
+
+lvim.colorscheme = 'dracula'
 
 local has_words_before = function()
   if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then return false end
@@ -86,7 +99,8 @@ end)
 lvim.builtin.cmp.mapping["<Tab>"] = on_tab
 
 -- Set keymaps to go emplements and references
-vim.api.nvim_set_keymap("n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>",
+  { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", { noremap = true, silent = true })
 
